@@ -9,6 +9,7 @@ from scripts.models import ValidationError
 
 
 PLACEHOLDER_RE = re.compile(r"(TODO|PLACEHOLDER|\\[Company\\]|\\[Position\\])", re.IGNORECASE)
+REQUIRED_RESUME_SECTIONS = ("Education", "Certificates", "Languages", "Achievement")
 
 
 def reject_em_dash(path: Path) -> None:
@@ -20,6 +21,13 @@ def reject_placeholders(path: Path) -> None:
     text = path.read_text(encoding="utf-8")
     if PLACEHOLDER_RE.search(text):
         raise ValidationError(f"Placeholder text remains in {path}")
+
+
+def require_resume_protected_sections(path: Path) -> None:
+    text = path.read_text(encoding="utf-8")
+    missing = [section for section in REQUIRED_RESUME_SECTIONS if f"\\section*{{{section}}}" not in text]
+    if missing:
+        raise ValidationError(f"Tailored resume is missing protected sections: {', '.join(missing)}")
 
 
 def compile_latex(tex_path: Path) -> Path:

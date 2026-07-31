@@ -198,7 +198,25 @@ Start from `master/Amir_Mirzai_Golpayegani_master_resume.tex`.
 
 Keep the tailored resume recognizably based on the master. Unless explicitly approved, keep changes to approximately 10% to 20% of master content.
 
-Permitted tailoring includes section and bullet reordering, emphasizing supported skills, small truthful wording adjustments, lower-priority omissions for space, summary alignment, supported project selection, careful emphasis, and ATS alignment without keyword stuffing.
+The following sections are protected and must always remain in every tailored resume:
+
+- `Education`
+- `Certificates`
+- `Languages`
+- `Achievement`
+
+Do not remove, rename, or materially weaken protected sections during tailoring. Keep the factual degree details, certificate names, language proficiency, and achievements from the master resume unless the user explicitly approves a change.
+
+Only these resume areas may be tailored for a job:
+
+- `Summary`
+- `Technical Skills`
+- `Work Experience`
+- `Research and Technical Projects`
+
+Permitted tailoring in those areas includes section and bullet reordering, emphasizing supported skills, small truthful wording adjustments, lower-priority omissions for space, summary alignment, supported project selection, careful emphasis, and ATS alignment without keyword stuffing.
+
+If page length is a concern, compile and inspect the actual page count before removing content. Do not guess based on source length. To reduce length, first trim or reorder lower-priority content inside the tailorable sections. Do not solve page-length issues by deleting protected sections.
 
 Do not invent experience, rewrite so extensively that the resume no longer reflects the master, add unsupported technologies, change dates, change employers, inflate titles, change degree information, add fake metrics, or add claims derived only from the job description.
 
@@ -227,7 +245,8 @@ Before committing:
 9. confirm job title and company are correct;
 10. confirm no content from another application remains;
 11. confirm no em dash exists in the cover letter;
-12. confirm only truthful, supported claims are present.
+12. confirm the tailored resume retains `Education`, `Certificates`, `Languages`, and `Achievement`;
+13. confirm only truthful, supported claims are present.
 
 Do not push LaTeX that fails local compilation when local LaTeX is available. Do not commit temporary compilation artifacts.
 

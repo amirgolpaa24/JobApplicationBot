@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.latex_validation import reject_em_dash, require_cover_letter_one_page
+from scripts.latex_validation import reject_em_dash, require_cover_letter_one_page, require_resume_protected_sections
 from scripts.models import ValidationError
 
 
@@ -23,3 +23,10 @@ def test_detects_cover_letter_longer_than_one_page(monkeypatch: pytest.MonkeyPat
     monkeypatch.setattr(validation, "pdf_page_count", lambda path: 2)
     with pytest.raises(ValidationError, match="must be one page"):
         require_cover_letter_one_page(pdf)
+
+
+def test_requires_resume_protected_sections(tmp_path: Path) -> None:
+    path = tmp_path / "resume.tex"
+    path.write_text("\\section*{Education}\n\\section*{Languages}\n", encoding="utf-8")
+    with pytest.raises(ValidationError, match="Certificates, Achievement"):
+        require_resume_protected_sections(path)
