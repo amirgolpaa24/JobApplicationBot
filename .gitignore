@@ -1,0 +1,17 @@
+.DS_Store
+__pycache__/
+*.pyc
+.env
+.env.*
+
+# LaTeX temporary files
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+*.xdv
+*.bcf
+*.run.xml
