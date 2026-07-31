@@ -21,6 +21,8 @@ applications/
     └── metadata.json
 ```
 
+Keep `metadata.json` with the LaTeX files so each generated application can be traced back to the job posting.
+
 Recommended metadata:
 
 ```json
