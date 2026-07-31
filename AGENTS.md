@@ -1,0 +1,313 @@
+# Job Application Preparation Agent Instructions
+
+This repository is an on-demand job application preparation project for Amir Mirzai Golpayegani. These instructions are permanent operational rules for future Codex runs.
+
+## Supported Commands
+
+Use the local command infrastructure for all preparation work. Do not improvise the workflow manually.
+
+- `./prepare next job`
+- `./prepare job <Job Number>`
+- `./prepare --dry-run next job`
+- `./prepare --dry-run job <Job Number>`
+- `./prepare finalize job <Job Number>`
+
+Natural-language user requests that match `prepare next job` or `prepare job <Job Number>` must invoke the matching local script. Process exactly one job per execution command.
+
+Do not prepare a real job during repository setup, review, refactoring, or testing unless the user explicitly issues one of the supported preparation commands.
+
+## Spreadsheet
+
+Spreadsheet URL:
+
+https://docs.google.com/spreadsheets/d/1FzeWuLeY0fv8uK3lGtNCY4QDfe0HbWq76bXY8moaqJs/edit?gid=1315930908#gid=1315930908
+
+Spreadsheet ID:
+
+`1FzeWuLeY0fv8uK3lGtNCY4QDfe0HbWq76bXY8moaqJs`
+
+Worksheet tab:
+
+`BotResults`
+
+Expected columns, in order:
+
+1. Job Number
+2. Position Title
+3. Company
+4. Location
+5. Work Arrangement
+6. Job Type
+7. Posting Date
+8. Date Added
+9. Fit Score
+10. Key Reasons for Fit
+11. Main Gaps
+12. Job ID
+13. Salary
+14. Recruiter or Contact Person
+15. LinkedIn Job Posting Link
+16. Direct Application Link
+17. Status
+18. Notes
+19. Curated Resume PDF Link
+20. Curated Resume LaTeX Link
+21. Cover Letter PDF Link
+22. Cover Letter LaTeX Link
+23. Prepared Date
+24. Errors
+
+Valid status values are exactly:
+
+- `Discovered`
+- `Prepared`
+- `Failed`
+
+Status matching is exact. Do not treat differently capitalized or whitespace-padded values as equivalent without explicitly reporting the data issue.
+
+Before selecting a row, verify the required column headers are present. Prefer header-based access over fixed column indices.
+
+Before any spreadsheet write:
+
+- re-read the selected row;
+- confirm its Job Number is unchanged;
+- confirm no other process has already changed its Status;
+- confirm Position Title and Company are unchanged;
+- update only the selected row;
+- avoid overwriting unrelated columns.
+
+## Google Authentication
+
+Use reliable programmatic Google Sheets access.
+
+When running inside Codex, prefer the connected Google Drive/Sheets plugin for spreadsheet reads and writes. The plugin is the normal access path for this project because it uses the user's connected Google account and avoids storing local Google credentials in the repository.
+
+Before relying on plugin writes, verify access with a safe read of the header row. For writes, use the plugin's spreadsheet batch update capability and follow the row re-read and status-update rules in this file.
+
+Local Google credentials are only needed when running the standalone CLI outside Codex or when the Codex Google Drive plugin is unavailable.
+
+Credentials must remain outside Git. Never commit OAuth client secrets, service-account JSON, refresh tokens, or complete credential logs.
+
+Supported standalone local configuration:
+
+- `JOBBOT_GOOGLE_SERVICE_ACCOUNT_FILE=/absolute/path/to/service-account.json`
+- `JOBBOT_GOOGLE_AUTHORIZED_USER_FILE=/absolute/path/to/authorized-user.json`
+- `JOBBOT_GOOGLE_TOKEN_FILE=/absolute/path/to/oauth-token.json`
+
+The authenticated plugin account or standalone credential identity must have edit permission before any spreadsheet write.
+
+## Repository And Sources
+
+GitHub repository: `amirgolpaa24/JobApplicationBot`
+
+Default branch: `main`
+
+Authoritative master files:
+
+- `master/Amir_Mirzai_Golpayegani_master_resume.tex`
+- `master/Amir_Mirzai_Golpayegani_cover_letter_example.tex`
+
+Authoritative GitHub Actions workflow:
+
+- `.github/workflows/compile-latex.yml`
+
+Do not overwrite, reformat, clean up, or modify the master files during ordinary job preparation. Treat them as sources of truth for truthful candidate claims and document structure.
+
+## Output Structure
+
+For Job Number `<number>`, use:
+
+`applications/Job_<number>/`
+
+Each completed job folder must contain:
+
+- `applications/Job_<number>/resume.tex`
+- `applications/Job_<number>/resume.pdf`
+- `applications/Job_<number>/cover_letter.tex`
+- `applications/Job_<number>/cover_letter.pdf`
+
+Use the spreadsheet Job Number exactly in the folder name. Do not use external Job ID values for folder numbering. Do not create duplicate folders such as `Job_<number>_2`.
+
+If a folder already exists, inspect its contents and classify it as partial, complete, or conflicting. Preserve valid existing files. Do not silently delete or overwrite completed work.
+
+## Job Selection
+
+For `prepare next job`:
+
+- re-read the Google Sheet immediately;
+- find rows whose Status is exactly `Discovered`;
+- select one eligible row;
+- sort by Fit Score highest first, Date Added newest first, Posting Date newest first, then Job Number lowest first.
+
+For `prepare job <Job Number>`:
+
+- interpret the value as the spreadsheet Job Number, not a row number or external Job ID;
+- re-read the spreadsheet immediately;
+- find the exact matching row;
+- do not substitute another job;
+- if Status is not exactly `Discovered`, report the current Status and make no changes unless the user explicitly instructs otherwise.
+
+## Job Description Retrieval
+
+Use the spreadsheet row as the initial source. Prefer the employer’s direct application link over LinkedIn or aggregators.
+
+When retrieving a job description:
+
+- verify Position Title;
+- verify Company;
+- verify Location;
+- verify Job ID when available;
+- verify the posting is accessible;
+- record the source used;
+- avoid similarly named but different positions.
+
+If the complete description cannot be obtained but the row has enough reliable detail to tailor responsibly, explain the limitation before proceeding. If information is too thin to create a truthful package, treat it as a preparation failure.
+
+## Hard Blockers
+
+Default action is to prepare the application. Do not reject jobs merely because some preferred qualifications are missing.
+
+Only these are hard blockers:
+
+1. The posting is confirmed closed, removed, cancelled, or expired.
+2. Canadian citizenship or permanent residency is explicitly mandatory.
+3. Security clearance is mandatory and obtaining it explicitly requires citizenship or permanent residency Amir does not have.
+4. Amir is confirmed legally ineligible to work in the required jurisdiction or under explicit posting requirements.
+5. A mandatory regulated licence or professional certification is required and Amir does not possess it.
+6. Mandatory work location or attendance requirements are genuinely incompatible with Amir’s situation.
+7. Application files cannot be generated or compiled after reasonable troubleshooting.
+8. The job description cannot be retrieved or verified sufficiently for a responsible package.
+
+These are not hard blockers: missing preferred qualifications, fewer years than requested, preferred skills, learnable domain background, senior-sounding responsibilities in an attainable role, ordinary competition risk, lack of referral, or unconfirmed uncertainty.
+
+Do not infer immigration ineligibility from sponsorship questions. Do not assume citizenship or permanent-residency requirements unless explicitly stated.
+
+When a hard blocker is confirmed, do not prepare documents. Record the exact blocker in Errors. Set Status to `Failed` only when the blocker is confirmed and the workflow rules justify final failure; otherwise leave Status as `Discovered` and report manual review.
+
+## Truthfulness
+
+Documents must remain completely truthful.
+
+Never fabricate or exaggerate years of experience, employment history, titles, responsibilities, languages, frameworks, cloud experience, certifications, academic credentials, immigration status, security clearance, publications, awards, projects, performance results, leadership, or industry experience.
+
+Use only the master resume and other explicitly approved candidate sources in the repository. Do not add technologies solely because they appear in the job description. Do not convert academic exposure into professional employment experience. Present the strongest truthful match without apologizing for gaps.
+
+## Resume Rules
+
+Start from `master/Amir_Mirzai_Golpayegani_master_resume.tex`.
+
+Keep the tailored resume recognizably based on the master. Unless explicitly approved, keep changes to approximately 10% to 20% of master content.
+
+Permitted tailoring includes section and bullet reordering, emphasizing supported skills, small truthful wording adjustments, lower-priority omissions for space, summary alignment, supported project selection, careful emphasis, and ATS alignment without keyword stuffing.
+
+Do not invent experience, rewrite so extensively that the resume no longer reflects the master, add unsupported technologies, change dates, change employers, inflate titles, change degree information, add fake metrics, or add claims derived only from the job description.
+
+## Cover Letter Rules
+
+Start from `master/Amir_Mirzai_Golpayegani_cover_letter_example.tex`.
+
+Follow the example’s structure, tone, specificity, opening style, paragraph organization, closing style, and LaTeX formatting.
+
+The cover letter must be tailored to the exact position and company, truthful, specific, one page, compilable, free of em dash characters, and free of invented hiring manager names.
+
+Use a named recruiter or contact only when the spreadsheet or verified posting provides one. Otherwise use a general salutation.
+
+## Local Validation
+
+Before committing:
+
+1. compile `resume.tex` locally with `latexmk`;
+2. compile `cover_letter.tex` locally with `latexmk`;
+3. confirm both commands exit successfully;
+4. confirm both PDFs exist;
+5. inspect page counts;
+6. confirm the cover letter is one page;
+7. check meaningful LaTeX warnings;
+8. confirm no placeholders remain;
+9. confirm job title and company are correct;
+10. confirm no content from another application remains;
+11. confirm no em dash exists in the cover letter;
+12. confirm only truthful, supported claims are present.
+
+Do not push LaTeX that fails local compilation when local LaTeX is available. Do not commit temporary compilation artifacts.
+
+## Git And GitHub Workflow
+
+For each selected job:
+
+1. ensure local `main` is synchronized with `origin/main`;
+2. ensure there are no unrelated uncommitted changes;
+3. create or update only the selected job folder;
+4. validate both LaTeX files locally;
+5. inspect the diff;
+6. stage only files belonging to the selected job;
+7. commit clearly;
+8. push to `main`;
+9. record the commit SHA.
+
+Suggested commit message:
+
+`Prepare application for Job <Job Number>: <Position Title> at <Company>`
+
+After pushing `.tex` files, identify the GitHub Actions run for the commit, wait for success, verify PDFs were committed, identify the PDF commit SHA, and verify all four remote files.
+
+Do not assume a successful push means PDFs exist. Do not set Status to `Prepared` while Actions is pending.
+
+## File Links And Spreadsheet Update
+
+After all four files exist remotely, generate verified links for:
+
+- Curated Resume PDF Link
+- Curated Resume LaTeX Link
+- Cover Letter PDF Link
+- Cover Letter LaTeX Link
+
+Prefer stable links tied to the final commit SHA. Ensure every link points to the selected Job Number.
+
+Only after all four files exist remotely and links are verified, update the selected row:
+
+- write all four links;
+- set Prepared Date in the user’s local timezone;
+- clear stale resolved Errors;
+- set Status exactly to `Prepared` last.
+
+After writing, re-read the row and verify links, Prepared Date, Errors, and Status.
+
+## Failure, Idempotency, And Locking
+
+A job is successful only when all four files exist remotely, links are verified and written to the correct spreadsheet row, Prepared Date is written, and Status is verified as `Prepared`.
+
+On error, stop at the safest point, preserve valid work, avoid unrelated row updates, do not claim completion, and record a concise exact error.
+
+The workflow must be safe to rerun. Before generating files, inspect the row, job folder, existing links, and relevant Git history. If files already exist and Status remains `Discovered`, verify and repair the spreadsheet state rather than regenerating unnecessarily.
+
+Use a local lock so two preparation commands cannot operate on the same repository or spreadsheet row at once. The lock must identify the selected Job Number, avoid storing credentials, clean up after normal completion, and handle stale locks safely.
+
+## Completion Report
+
+After each preparation command, show a concise report with:
+
+- command received;
+- Job Number;
+- Position Title;
+- Company name;
+- Location;
+- Work Arrangement;
+- Referral / Contact Person;
+- Job Type;
+- selection reason for `prepare next job`;
+- hard-blocker result;
+- job-description source;
+- files created or reused;
+- local compilation results;
+- resume page count;
+- cover-letter page count;
+- application commit SHA;
+- PDF workflow status;
+- PDF commit SHA when applicable;
+- four final file links;
+- final spreadsheet Status;
+- Prepared Date;
+- remaining error or manual action.
+
+Do not report an unprocessed job as failed. Do not claim completion unless the spreadsheet row has been re-read and verified as `Prepared`.

@@ -1,94 +1,84 @@
-name: Compile LaTeX applications
+name: Compile application LaTeX
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'applications/**/*.tex'
-      - '.github/workflows/compile-latex.yml'
+      - "applications/Job_*/resume.tex"
+      - "applications/Job_*/cover_letter.tex"
+      - ".github/workflows/compile-latex.yml"
   workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: compile-latex-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   compile:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Install LaTeX dependencies
+      - name: Install TeX dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
+          sudo apt-get install -y --no-install-recommends \
             latexmk \
-            texlive-latex-base \
-            texlive-latex-recommended \
+            texlive-fonts-extra \
             texlive-latex-extra \
             texlive-fonts-recommended \
-            texlive-fonts-extra
+            texlive-latex-recommended \
+            poppler-utils
 
-      - name: Compile application PDFs
+      - name: Compile changed application files
         shell: bash
         run: |
           set -euo pipefail
           shopt -s nullglob
 
-          job_dirs=(applications/Job_*)
-          if (( ${#job_dirs[@]} == 0 )); then
-            echo "No applications/Job_* directories found."
-            exit 0
-          fi
-
-          for job_dir in "${job_dirs[@]}"; do
-            [[ -d "$job_dir" ]] || continue
-
-            for source in resume.tex cover_letter.tex; do
-              if [[ -f "$job_dir/$source" ]]; then
-                echo "Compiling $job_dir/$source"
-                (
-                  cd "$job_dir"
-                  latexmk -pdf -interaction=nonstopmode -halt-on-error "$source"
-                )
-              else
-                echo "Skipping missing $job_dir/$source"
-              fi
-            done
-
-            find "$job_dir" -maxdepth 1 -type f \( \
-              -name '*.aux' -o \
-              -name '*.log' -o \
-              -name '*.out' -o \
-              -name '*.fls' -o \
-              -name '*.fdb_latexmk' -o \
-              -name '*.synctex.gz' \
-            \) -delete
+          found=0
+          for tex in applications/Job_*/resume.tex applications/Job_*/cover_letter.tex; do
+            found=1
+            file="$(basename "$tex")"
+            latexmk -pdf -interaction=nonstopmode -halt-on-error -cd "$tex"
+            pdf="${tex%.tex}.pdf"
+            test -s "$pdf"
+            if [[ "$file" == "cover_letter.tex" ]]; then
+              pages="$(pdfinfo "$pdf" | awk -F: '/^Pages:/ {gsub(/ /, "", $2); print $2}')"
+              test "$pages" = "1"
+            fi
+            latexmk -c -cd "$tex"
           done
+
+          if [[ "$found" = "0" ]]; then
+            echo "No application LaTeX files found."
+          fi
 
       - name: Commit generated PDFs
         shell: bash
         run: |
           set -euo pipefail
-          shopt -s globstar nullglob
-
-          pdfs=(applications/Job_*/*.pdf)
-          if (( ${#pdfs[@]} == 0 )); then
-            echo "No generated PDFs found."
+          shopt -s nullglob
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          pdfs=(applications/Job_*/resume.pdf applications/Job_*/cover_letter.pdf)
+          if [[ "${#pdfs[@]}" = "0" ]]; then
+            echo "No PDFs found to commit."
             exit 0
           fi
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git add -- "${pdfs[@]}"
-
+          git add "${pdfs[@]}"
           if git diff --cached --quiet; then
             echo "No PDF changes to commit."
-            exit 0
+          else
+            git commit -m "Compile application PDFs"
+            git push
           fi
-
-          git commit -m "Compile application PDFs"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
