@@ -11,10 +11,16 @@ Use the local command infrastructure for all preparation work. Do not improvise 
 - `./prepare --dry-run next job`
 - `./prepare --dry-run job <Job Number>`
 - `./prepare finalize job <Job Number>`
+- `./prepare add job <posting-url>`
+- `./prepare --dry-run add job <posting-url>`
 
 Natural-language user requests that match `prepare next job` or `prepare job <Job Number>` must invoke the matching local script. Process exactly one job per execution command.
 
+Natural-language user requests that match `add job <posting-url>`, `add this job <posting-url>`, or `add <posting-url> to the sheet` must invoke `./prepare --dry-run add job <posting-url>` as a local preflight, then use the connected Google Drive/Sheets plugin to inspect and update the spreadsheet. Process exactly one posting URL per add command.
+
 Do not prepare a real job during repository setup, review, refactoring, or testing unless the user explicitly issues one of the supported preparation commands.
+
+Do not prepare application materials as part of `add job`. The add command only discovers, verifies, de-duplicates, scores, and records a posting as `Discovered`.
 
 ## Spreadsheet
 
@@ -146,6 +152,59 @@ For `prepare job <Job Number>`:
 - find the exact matching row;
 - do not substitute another job;
 - if Status is not exactly `Discovered`, report the current Status and make no changes unless the user explicitly instructs otherwise.
+
+## Manual Job Intake
+
+For `add job <posting-url>`:
+
+- treat the user-provided URL as the initial source of truth;
+- accept either a LinkedIn job URL or an employer/company application URL;
+- use the local add-job preflight first to validate that the command contains one supported URL;
+- use the connected Google Drive/Sheets plugin for all live spreadsheet reads and writes when working inside Codex;
+- do not add more than one spreadsheet row for a single user command;
+- do not prepare a resume or cover letter.
+
+Before writing a new row:
+
+- read spreadsheet metadata and confirm the `BotResults` tab and expected headers;
+- read the existing populated job rows;
+- check for duplicates by normalized LinkedIn URL, normalized direct application URL, Job ID, and strong title/company match;
+- if an existing row appears to represent the same posting, report the existing Job Number, Status, title, company, and matching evidence, then do not add a duplicate unless the user explicitly confirms;
+- retrieve and verify the posting from the best available source, preferring the employer's direct application page when the user gave LinkedIn and the direct page can be found;
+- verify the position title, company, location, work arrangement, job type, posting date or best available posting-age evidence, salary, recruiter/contact if present, Job ID if present, and whether the posting is still accessible;
+- evaluate fit using Amir's master resume and truthful background only;
+- assign the next Job Number as one greater than the maximum numeric Job Number already in the sheet;
+- set Date Added in the user's local timezone;
+- set Status exactly to `Discovered`;
+- leave all preparation-only columns blank: Curated Resume PDF Link, Curated Resume LaTeX Link, Cover Letter PDF Link, Cover Letter LaTeX Link, Prepared Date, and Errors;
+- keep Notes concise and include any uncertainty about posting date, source reliability, or direct-link discovery.
+
+The added row must fill these non-preparation columns when available or use `NA` when genuinely unavailable:
+
+- Job Number
+- Position Title
+- Company
+- Location
+- Work Arrangement
+- Job Type
+- Posting Date
+- Date Added
+- Fit Score
+- Key Reasons for Fit
+- Main Gaps
+- Job ID
+- Salary
+- Recruiter or Contact Person
+- LinkedIn Job Posting Link
+- Direct Application Link
+- Status
+- Notes
+
+After writing:
+
+- re-read the new row;
+- verify Job Number, Position Title, Company, Status, source links, Date Added, and blank preparation-only columns;
+- report the added Job Number and the duplicate checks performed.
 
 ## Job Description Retrieval
 

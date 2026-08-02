@@ -14,9 +14,13 @@ Run from the repository root:
 ./prepare next job
 ./prepare job <Job Number>
 ./prepare finalize job <Job Number>
+./prepare --dry-run add job <posting-url>
+./prepare add job <posting-url>
 ```
 
 Dry-run mode reads and selects a job, attempts job-description discovery, and reports proposed actions without generating final files, committing, pushing, or updating the spreadsheet.
+
+The add-job command is for user-supplied postings found outside the scheduled discovery workflow. In Codex, run the dry-run preflight first, then use the connected Google Drive/Sheets plugin to verify the posting, check for duplicates, and append one `Discovered` row with preparation-only columns left blank. It does not prepare a resume or cover letter.
 
 ## Google Sheets Authentication
 

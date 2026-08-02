@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 from scripts.config import RuntimeConfig
+from scripts.job_intake import AddJobPreflight, normalize_posting_url
 from scripts.job_description import retrieve_job_description
 from scripts.job_selector import select_job_number, select_next_job
 from scripts.lock import JobLock
@@ -16,7 +17,7 @@ from scripts.sheets_client import GoogleSheetsClient
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Prepare one job application package.")
     parser.add_argument("--dry-run", action="store_true", help="Select and inspect without writing, committing, pushing, or updating Sheets.")
-    parser.add_argument("command", choices=["next", "job", "finalize"])
+    parser.add_argument("command", choices=["next", "job", "finalize", "add"])
     parser.add_argument("rest", nargs="*")
     args = parser.parse_args(argv)
     if args.command == "next" and args.rest != ["job"]:
@@ -25,6 +26,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         parser.error("Use: prepare [--dry-run] job <Job Number>")
     if args.command == "finalize" and (len(args.rest) != 2 or args.rest[0] != "job"):
         parser.error("Use: prepare finalize job <Job Number>")
+    if args.command == "add" and (len(args.rest) != 2 or args.rest[0] != "job"):
+        parser.error("Use: prepare [--dry-run] add job <posting-url>")
     return args
 
 
@@ -41,10 +44,29 @@ def select_job(args: argparse.Namespace, rows: list[JobRow]) -> tuple[JobRow, st
     return select_job_number(rows, args.rest[1]), "Finalize existing partial job requested."
 
 
+def run_add_job_preflight(args: argparse.Namespace, command_text: str) -> int:
+    url = args.rest[1]
+    normalized_url = normalize_posting_url(url)
+    print(AddJobPreflight(command_received=command_text, posting_url=url, normalized_url=normalized_url).render())
+    if args.dry_run:
+        return 0
+    print(
+        "Manual action required: inside Codex, use the connected Google Drive/Sheets plugin to "
+        "retrieve the posting, de-duplicate BotResults, and append the Discovered row."
+    )
+    return 2
+
+
 def run(argv: list[str]) -> int:
     args = parse_args(argv)
     config = RuntimeConfig.from_env(Path.cwd())
     command_text = _command_text(args)
+    if args.command == "add":
+        try:
+            return run_add_job_preflight(args, command_text)
+        except JobBotError as exc:
+            print(f"Command received: {command_text}\nError: {exc}", file=sys.stderr)
+            return 1
     client = GoogleSheetsClient(config)
     try:
         rows = client.read_rows()
