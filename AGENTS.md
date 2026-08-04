@@ -44,19 +44,19 @@ Expected columns, in order:
 4. Location
 5. Priority
 6. Fit Score
-7. Work Arrangement
-8. Job Type
-9. Posting Date
-10. Date Added
-11. Key Reasons for Fit
-12. Main Gaps
-13. Job ID
-14. Salary
-15. Expected Salary
-16. Recruiter or Contact Person
-17. LinkedIn Job Posting Link
-18. Direct Application Link
-19. Status
+7. Status
+8. Work Arrangement
+9. Job Type
+10. Posting Date
+11. Date Added
+12. Key Reasons for Fit
+13. Main Gaps
+14. Job ID
+15. Salary
+16. Expected Salary
+17. Recruiter or Contact Person
+18. LinkedIn Job Posting Link
+19. Direct Application Link
 20. Notes
 21. Curated Resume PDF Link
 22. Curated Resume LaTeX Link
@@ -199,6 +199,7 @@ The added row must fill these non-preparation columns when available or use `NA`
 - Location
 - Priority
 - Fit Score
+- Status
 - Work Arrangement
 - Job Type
 - Posting Date
@@ -210,7 +211,6 @@ The added row must fill these non-preparation columns when available or use `NA`
 - Recruiter or Contact Person
 - LinkedIn Job Posting Link
 - Direct Application Link
-- Status
 - Notes
 
 After writing:
