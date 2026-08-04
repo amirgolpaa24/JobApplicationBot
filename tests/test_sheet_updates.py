@@ -26,7 +26,19 @@ def test_refuses_to_mark_prepared_without_four_links() -> None:
 
 def test_success_update_requires_all_links() -> None:
     with pytest.raises(ValidationError, match="Cannot mark Prepared"):
-        updates_for_success(LinkSet("", "tex", "pdf", "tex"), datetime(2026, 1, 1))
+        updates_for_success(LinkSet("", "tex", "pdf", "tex"), datetime(2026, 1, 1), "CA$115,000")
+
+
+def test_success_update_requires_expected_salary() -> None:
+    links = LinkSet("resume.pdf", "resume.tex", "cover.pdf", "cover.tex")
+    with pytest.raises(ValidationError, match="Expected Salary"):
+        updates_for_success(links, datetime(2026, 1, 1))
+
+
+def test_success_update_includes_expected_salary() -> None:
+    links = LinkSet("resume.pdf", "resume.tex", "cover.pdf", "cover.tex")
+    updates = updates_for_success(links, datetime(2026, 1, 1), "CA$115,000-CA$125,000")
+    assert updates["Expected Salary"] == "CA$115,000-CA$125,000"
 
 
 def test_changed_spreadsheet_row_before_final_write() -> None:

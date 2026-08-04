@@ -9,6 +9,7 @@ from scripts.models import JobRow, ValidationError
 
 
 PREPARATION_ONLY_FIELDS = [
+    "Expected Salary",
     *LINK_FIELDS,
     "Prepared Date",
     "Errors",

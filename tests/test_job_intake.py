@@ -67,6 +67,7 @@ def test_build_added_row_blanks_preparation_columns() -> None:
     mapped = dict(zip(EXPECTED_HEADERS, added, strict=True))
     assert mapped["Date Added"] == "2026-08-01 09:30"
     assert mapped["Status"] == "Discovered"
+    assert mapped["Expected Salary"] == ""
     assert mapped["Curated Resume PDF Link"] == ""
     assert mapped["Prepared Date"] == ""
     assert mapped["Errors"] == ""

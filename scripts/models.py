@@ -103,6 +103,7 @@ class PreparationReport:
     pdf_workflow_status: str = ""
     pdf_commit_sha: str = ""
     links: LinkSet | None = None
+    expected_salary: str = ""
     final_spreadsheet_status: str = ""
     prepared_date: str = ""
     error: str = ""
@@ -120,6 +121,7 @@ class PreparationReport:
             f"Work Arrangement: {self.job['Work Arrangement']}",
             f"Referral / Contact Person: {self.job['Recruiter or Contact Person']}",
             f"Job Type: {self.job['Job Type']}",
+            f"Expected Salary: {self.expected_salary or self.job['Expected Salary']}",
             f"Selection reason: {self.selection_reason}",
             f"Hard-blocker result: {self.hard_blocker_result}",
             f"Job-description source: {self.job_description_source}",
@@ -147,9 +149,13 @@ def validate_headers(headers: list[str]) -> None:
         raise ValidationError(f"Missing required spreadsheet headers: {', '.join(missing)}")
 
 
-def updates_for_success(links: LinkSet, prepared_at: datetime) -> dict[str, str]:
+def updates_for_success(links: LinkSet, prepared_at: datetime, expected_salary: str = "") -> dict[str, str]:
     links.require_complete()
+    normalized_expected_salary = expected_salary.strip()
+    if not normalized_expected_salary:
+        raise ValidationError("Cannot mark Prepared without Expected Salary")
     updates = links.as_sheet_updates()
+    updates["Expected Salary"] = normalized_expected_salary
     updates["Prepared Date"] = prepared_at.isoformat(timespec="seconds")
     updates["Errors"] = ""
     updates["Status"] = "Prepared"
@@ -158,6 +164,8 @@ def updates_for_success(links: LinkSet, prepared_at: datetime) -> dict[str, str]
 
 def ensure_prepared_update_is_safe(updates: Mapping[str, str]) -> None:
     if updates.get("Status") == "Prepared":
+        if not updates.get("Expected Salary", "").strip():
+            raise ValidationError("Cannot mark Prepared without Expected Salary")
         for field in LINK_FIELDS:
             if not updates.get(field):
                 raise ValidationError(f"Cannot mark Prepared without {field}")

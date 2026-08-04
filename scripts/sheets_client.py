@@ -54,7 +54,7 @@ class GoogleSheetsClient:
         return result.get("values", [])
 
     def read_rows(self) -> list[JobRow]:
-        values = self._values("A:X")
+        values = self._values("A:Z")
         if not values:
             return []
         headers = values[0]
@@ -66,7 +66,7 @@ class GoogleSheetsClient:
         return rows
 
     def reread_row(self, row_number: int) -> JobRow:
-        values = self._values(f"A{row_number}:X{row_number}")
+        values = self._values(f"A{row_number}:Z{row_number}")
         headers = EXPECTED_HEADERS
         raw = values[0] if values else []
         mapped = {header: raw[pos] if pos < len(raw) else "" for pos, header in enumerate(headers)}
@@ -76,7 +76,7 @@ class GoogleSheetsClient:
         service = self._build_service()
         service.spreadsheets().values().update(
             spreadsheetId=self.config.spreadsheet_id,
-            range=f"{self.config.worksheet_name}!A{row_number}:X{row_number}",
+            range=f"{self.config.worksheet_name}!A{row_number}:Z{row_number}",
             valueInputOption="USER_ENTERED",
             body={"values": [values]},
         ).execute()

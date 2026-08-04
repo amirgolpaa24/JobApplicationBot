@@ -42,26 +42,28 @@ Expected columns, in order:
 2. Position Title
 3. Company
 4. Location
-5. Work Arrangement
-6. Job Type
-7. Posting Date
-8. Date Added
-9. Fit Score
-10. Key Reasons for Fit
-11. Main Gaps
-12. Job ID
-13. Salary
-14. Recruiter or Contact Person
-15. LinkedIn Job Posting Link
-16. Direct Application Link
-17. Status
-18. Notes
-19. Curated Resume PDF Link
-20. Curated Resume LaTeX Link
-21. Cover Letter PDF Link
-22. Cover Letter LaTeX Link
-23. Prepared Date
-24. Errors
+5. Priority
+6. Fit Score
+7. Work Arrangement
+8. Job Type
+9. Posting Date
+10. Date Added
+11. Key Reasons for Fit
+12. Main Gaps
+13. Job ID
+14. Salary
+15. Expected Salary
+16. Recruiter or Contact Person
+17. LinkedIn Job Posting Link
+18. Direct Application Link
+19. Status
+20. Notes
+21. Curated Resume PDF Link
+22. Curated Resume LaTeX Link
+23. Cover Letter PDF Link
+24. Cover Letter LaTeX Link
+25. Prepared Date
+26. Errors
 
 Valid status values are exactly:
 
@@ -81,6 +83,14 @@ Before any spreadsheet write:
 - confirm Position Title and Company are unchanged;
 - update only the selected row;
 - avoid overwriting unrelated columns.
+
+## Expected Salary
+
+`Expected Salary` is a preparation-time field. Leave it blank during discovery and manual job intake, then fill it when preparing the job.
+
+When preparing a job, estimate a fair expected salary using the verified posting salary if available, the role level, location, work arrangement, market context, and Amir's qualifications. Do not underestimate Amir's value, because underrepresenting the candidate can weaken an application. Do not overreach beyond a defensible level either. Prefer a middle-to-upper-middle number or range that is ambitious but realistic for the specific role.
+
+Use a concise numeric value only. Do not write a sentence. Use the posting currency when clearly stated; otherwise use CAD for Canadian roles. Examples: `CA$115,000` or `CA$105,000-CA$125,000`.
 
 ## Google Authentication
 
@@ -143,7 +153,9 @@ For `prepare next job`:
 - re-read the Google Sheet immediately;
 - find rows whose Status is exactly `Discovered`;
 - select one eligible row;
-- sort by Fit Score highest first, Date Added newest first, Posting Date newest first, then Job Number lowest first.
+- sort by Priority first using `High`, then `Mid`, then `Low`, then blank or unrecognized values; within each priority group sort by Fit Score highest first, Date Added newest first, Posting Date newest first, then Job Number lowest first.
+
+The `Priority` column is filled by the job match finder. Do not overwrite or infer it during preparation or manual job intake.
 
 For `prepare job <Job Number>`:
 
@@ -176,7 +188,7 @@ Before writing a new row:
 - assign the next Job Number as one greater than the maximum numeric Job Number already in the sheet;
 - set Date Added in the user's local timezone;
 - set Status exactly to `Discovered`;
-- leave all preparation-only columns blank: Curated Resume PDF Link, Curated Resume LaTeX Link, Cover Letter PDF Link, Cover Letter LaTeX Link, Prepared Date, and Errors;
+- leave all preparation-only columns blank: Expected Salary, Curated Resume PDF Link, Curated Resume LaTeX Link, Cover Letter PDF Link, Cover Letter LaTeX Link, Prepared Date, and Errors;
 - keep Notes concise and include any uncertainty about posting date, source reliability, or direct-link discovery.
 
 The added row must fill these non-preparation columns when available or use `NA` when genuinely unavailable:
@@ -185,11 +197,12 @@ The added row must fill these non-preparation columns when available or use `NA`
 - Position Title
 - Company
 - Location
+- Priority
+- Fit Score
 - Work Arrangement
 - Job Type
 - Posting Date
 - Date Added
-- Fit Score
 - Key Reasons for Fit
 - Main Gaps
 - Job ID
@@ -203,7 +216,7 @@ The added row must fill these non-preparation columns when available or use `NA`
 After writing:
 
 - re-read the new row;
-- verify Job Number, Position Title, Company, Status, source links, Date Added, and blank preparation-only columns;
+- verify Job Number, Position Title, Company, Status, source links, Date Added, and blank preparation-only columns, including Expected Salary;
 - report the added Job Number and the duplicate checks performed.
 
 ## Job Description Retrieval
@@ -344,12 +357,13 @@ Prefer stable links tied to the final commit SHA. Ensure every link points to th
 
 Only after all four files exist remotely and links are verified, update the selected row:
 
+- write Expected Salary as a concise number or range;
 - write all four links;
 - set Prepared Date in the user’s local timezone;
 - clear stale resolved Errors;
 - set Status exactly to `Prepared` last.
 
-After writing, re-read the row and verify links, Prepared Date, Errors, and Status.
+After writing, re-read the row and verify Expected Salary, links, Prepared Date, Errors, and Status.
 
 ## Failure, Idempotency, And Locking
 
@@ -373,6 +387,7 @@ After each preparation command, show a concise report with:
 - Work Arrangement;
 - Referral / Contact Person;
 - Job Type;
+- Expected Salary;
 - selection reason for `prepare next job`;
 - hard-blocker result;
 - job-description source;
