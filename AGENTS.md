@@ -16,7 +16,7 @@ Use the local command infrastructure for all preparation work. Do not improvise 
 
 Natural-language user requests that match `prepare next job` or `prepare job <Job Number>` must invoke the matching local script. Process exactly one job per execution command.
 
-Natural-language user requests that match `add job <posting-url>`, `add this job <posting-url>`, or `add <posting-url> to the sheet` must invoke `./prepare --dry-run add job <posting-url>` as a local preflight, then use the connected Google Drive/Sheets plugin to inspect and update the spreadsheet. Process exactly one posting URL per add command.
+Natural-language user requests that match `add job <posting-url>`, `add this job <posting-url>`, or `add <posting-url> to the sheet` must use the connected Google Drive/Sheets plugin to inspect and update the spreadsheet. Process exactly one posting URL per add command.
 
 Do not prepare a real job during repository setup, review, refactoring, or testing unless the user explicitly issues one of the supported preparation commands.
 
@@ -155,7 +155,7 @@ For `prepare next job`:
 - select one eligible row;
 - sort by Priority first using `High`, then `Mid`, then `Low`, then blank or unrecognized values; within each priority group sort by Fit Score highest first, Date Added newest first, Posting Date newest first, then Job Number lowest first.
 
-The `Priority` column is filled by the job match finder. Do not overwrite or infer it during preparation or manual job intake.
+The `Priority` column is filled by the job match finder for discovered jobs from the scheduled search. Do not overwrite it during preparation. For manual job intake, assign `High`, `Mid`, or `Low` based on fit strength, location/work-arrangement desirability, role relevance, urgency, and application value.
 
 For `prepare job <Job Number>`:
 
@@ -171,7 +171,6 @@ For `add job <posting-url>`:
 
 - treat the user-provided URL as the initial source of truth;
 - accept either a LinkedIn job URL or an employer/company application URL;
-- use the local add-job preflight first to validate that the command contains one supported URL;
 - use the connected Google Drive/Sheets plugin for all live spreadsheet reads and writes when working inside Codex;
 - do not add more than one spreadsheet row for a single user command;
 - do not prepare a resume or cover letter.
@@ -185,7 +184,11 @@ Before writing a new row:
 - retrieve and verify the posting from the best available source, preferring the employer's direct application page when the user gave LinkedIn and the direct page can be found;
 - verify the position title, company, location, work arrangement, job type, posting date or best available posting-age evidence, salary, recruiter/contact if present, Job ID if present, and whether the posting is still accessible;
 - evaluate fit using Amir's master resume and truthful background only;
+- assign Priority as `High`, `Mid`, or `Low`; do not leave it blank for manually added jobs;
 - assign the next Job Number as one greater than the maximum numeric Job Number already in the sheet;
+- write the new row into the first truly empty row in the populated `BotResults` table area;
+- do not leave blank rows or visual gaps between populated job rows;
+- if blank rows already exist inside the populated table area, fill the earliest suitable blank row rather than appending after later populated rows;
 - set Date Added in the user's local timezone;
 - set Status exactly to `Discovered`;
 - leave all preparation-only columns blank: Expected Salary, Curated Resume PDF Link, Curated Resume LaTeX Link, Cover Letter PDF Link, Cover Letter LaTeX Link, Prepared Date, and Errors;
@@ -216,6 +219,7 @@ The added row must fill these non-preparation columns when available or use `NA`
 After writing:
 
 - re-read the new row;
+- re-read the surrounding rows and verify no blank row was introduced between populated job rows;
 - verify Job Number, Position Title, Company, Status, source links, Date Added, and blank preparation-only columns, including Expected Salary;
 - report the added Job Number and the duplicate checks performed.
 
