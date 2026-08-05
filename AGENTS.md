@@ -13,6 +13,7 @@ Use the local command infrastructure for all preparation work. Do not improvise 
 - `./prepare finalize job <Job Number>`
 - `./prepare add job <posting-url>`
 - `./prepare --dry-run add job <posting-url>`
+- `message <Job Number> <linkedin-profile-url> [short]`
 
 Natural-language user requests that match `prepare next job` or `prepare job <Job Number>` must invoke the matching local script. Process exactly one job per execution command.
 
@@ -21,6 +22,8 @@ Natural-language user requests that match `add job <posting-url>`, `add this job
 Do not prepare a real job during repository setup, review, refactoring, or testing unless the user explicitly issues one of the supported preparation commands.
 
 Do not prepare application materials as part of `add job`. The add command only discovers, verifies, de-duplicates, scores, and records a posting as `Discovered`.
+
+Natural-language user requests that match `message <Job Number> <linkedin-profile-url>` or `message <Job Number> <linkedin-profile-url> short` must draft exactly one LinkedIn outreach message for that job and profile. This command does not prepare documents, commit files, push code, or update the spreadsheet.
 
 ## Spreadsheet
 
@@ -222,6 +225,26 @@ After writing:
 - re-read the surrounding rows and verify no blank row was introduced between populated job rows;
 - verify Job Number, Position Title, Company, Status, source links, Date Added, and blank preparation-only columns, including Expected Salary;
 - report the added Job Number and the duplicate checks performed.
+
+## LinkedIn Outreach Messages
+
+For `message <Job Number> <linkedin-profile-url> [short]`:
+
+- re-read the Google Sheet immediately;
+- interpret `<Job Number>` as the spreadsheet Job Number, not a row number or external Job ID;
+- find the exact matching job row and use its Position Title, Company, Recruiter or Contact Person, prepared file links, and Notes when relevant;
+- inspect the provided LinkedIn profile URL when accessible, or use the visible profile information provided by the user if the page cannot be accessed;
+- draft exactly one message and do not send it;
+- keep the message natural, personal, and at most 2-3 sentences;
+- mention that Amir has applied for the job;
+- include a brief, specific fit/background phrase based on the job row and Amir's truthful background;
+- ask for any advice on the resume or job application;
+- if `short` is present, write a short connection-style message and do not say Amir is attaching a resume;
+- if `short` is absent, write a message that says Amir would like to attach or share his resume;
+- if the person appears to be from Iran or Iranian, start with `Salaam`, ask politely for a referral, and keep the tone warm but professional;
+- if the person does not appear to be Iranian, do not ask directly for a referral first; instead ask whether they would be open to a brief chat or coffee chat to discuss the role, company, or application process;
+- do not invent a relationship, shared history, referral promise, hiring influence, nationality, language ability, or inside-company knowledge;
+- if the person's background or nationality is uncertain, avoid identity-specific assumptions and use the non-Iranian/default message style.
 
 ## Job Description Retrieval
 
