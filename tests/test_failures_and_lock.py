@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.github_workflow import CommandResult, commit_and_push_job, workflow_failure
+from scripts.github_workflow import CommandResult, commit_and_push_job
 from scripts.lock import JobLock
 from scripts.models import ValidationError
 
@@ -16,8 +16,10 @@ def test_handles_git_push_failure(monkeypatch: pytest.MonkeyPatch, tmp_path: Pat
 
     job_folder = tmp_path / "applications" / "Job_8"
     job_folder.mkdir(parents=True)
+    git_calls: list[list[str]] = []
 
     def fake_run_git(args: list[str], cwd: Path) -> CommandResult:
+        git_calls.append(args)
         if args[0] == "push":
             return CommandResult(1, "simulated push rejection")
         return CommandResult(0, "ok")
@@ -25,11 +27,13 @@ def test_handles_git_push_failure(monkeypatch: pytest.MonkeyPatch, tmp_path: Pat
     monkeypatch.setattr(github_workflow, "run_git", fake_run_git)
     with pytest.raises(ValidationError, match="Git push failed"):
         commit_and_push_job(tmp_path, job_folder, "message")
-
-
-def test_handles_github_actions_failure() -> None:
-    with pytest.raises(ValidationError, match="compile"):
-        workflow_failure("compile log says no PDF")
+    assert git_calls[0] == [
+        "add",
+        "applications/Job_8/resume.tex",
+        "applications/Job_8/resume.pdf",
+        "applications/Job_8/cover_letter.tex",
+        "applications/Job_8/cover_letter.pdf",
+    ]
 
 
 def test_handles_stale_lock(tmp_path: Path) -> None:

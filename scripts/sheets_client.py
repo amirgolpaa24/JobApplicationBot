@@ -54,7 +54,7 @@ class GoogleSheetsClient:
         return result.get("values", [])
 
     def read_rows(self) -> list[JobRow]:
-        values = self._values("A:Z")
+        values = self._values("A1:Z1000")
         if not values:
             return []
         headers = values[0]

@@ -112,33 +112,27 @@ class PreparationReport:
         if self.job is None:
             return f"Command received: {self.command_received}\nError: {self.error or 'No job selected.'}"
         link_updates = self.links.as_sheet_updates() if self.links else {}
+        if self.error:
+            return "\n".join(
+                [
+                    f"Command received: {self.command_received}",
+                    f"Job {self.job.job_number}: {self.job.position_title} at {self.job.company}",
+                    f"Error: {self.error}",
+                ]
+            )
         lines = [
-            f"Command received: {self.command_received}",
-            f"Job Number: {self.job.job_number}",
-            f"Position Title: {self.job.position_title}",
-            f"Company name: {self.job.company}",
-            f"Location: {self.job['Location']}",
-            f"Work Arrangement: {self.job['Work Arrangement']}",
-            f"Referral / Contact Person: {self.job['Recruiter or Contact Person']}",
-            f"Job Type: {self.job['Job Type']}",
+            f"Prepared Job {self.job.job_number}: {self.job.position_title} at {self.job.company}",
+            f"Location: {self.job['Location']} ({self.job['Work Arrangement']})",
             f"Expected Salary: {self.expected_salary or self.job['Expected Salary']}",
-            f"Selection reason: {self.selection_reason}",
-            f"Hard-blocker result: {self.hard_blocker_result}",
-            f"Job-description source: {self.job_description_source}",
-            f"Files created or reused: {self.files_created_or_reused}",
             f"Local compilation results: {self.local_compilation_results}",
-            f"Resume page count: {self.resume_page_count if self.resume_page_count is not None else ''}",
-            f"Cover-letter page count: {self.cover_letter_page_count if self.cover_letter_page_count is not None else ''}",
+            f"Pages: resume {self.resume_page_count if self.resume_page_count is not None else ''}, cover letter {self.cover_letter_page_count if self.cover_letter_page_count is not None else ''}",
             f"Application commit SHA: {self.application_commit_sha}",
-            f"PDF workflow status: {self.pdf_workflow_status}",
-            f"PDF commit SHA: {self.pdf_commit_sha}",
             f"Curated Resume PDF Link: {link_updates.get('Curated Resume PDF Link', '')}",
             f"Curated Resume LaTeX Link: {link_updates.get('Curated Resume LaTeX Link', '')}",
             f"Cover Letter PDF Link: {link_updates.get('Cover Letter PDF Link', '')}",
             f"Cover Letter LaTeX Link: {link_updates.get('Cover Letter LaTeX Link', '')}",
             f"Final spreadsheet Status: {self.final_spreadsheet_status}",
             f"Prepared Date: {self.prepared_date}",
-            f"Remaining error or manual action: {self.error}",
         ]
         return "\n".join(lines)
 

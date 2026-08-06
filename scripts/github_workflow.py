@@ -28,7 +28,16 @@ def require_clean_worktree(cwd: Path) -> None:
 
 def commit_and_push_job(cwd: Path, job_folder: Path, message: str) -> str:
     rel = job_folder.relative_to(cwd)
-    add = run_git(["add", str(rel / "resume.tex"), str(rel / "cover_letter.tex")], cwd)
+    add = run_git(
+        [
+            "add",
+            str(rel / "resume.tex"),
+            str(rel / "resume.pdf"),
+            str(rel / "cover_letter.tex"),
+            str(rel / "cover_letter.pdf"),
+        ],
+        cwd,
+    )
     if add.returncode != 0:
         raise ValidationError(f"Git add failed: {add.stdout}")
     commit = run_git(["commit", "-m", message], cwd)
@@ -41,7 +50,3 @@ def commit_and_push_job(cwd: Path, job_folder: Path, message: str) -> str:
     if sha.returncode != 0:
         raise ValidationError(f"Could not determine application commit SHA: {sha.stdout}")
     return sha.stdout
-
-
-def workflow_failure(message: str) -> None:
-    raise ValidationError(f"GitHub Actions failed while compiling application files: {message}")

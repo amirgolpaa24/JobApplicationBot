@@ -15,7 +15,7 @@ Use the local command infrastructure for all preparation work. Do not improvise 
 - `./prepare --dry-run add job <posting-url>`
 - `message <Job Number> <linkedin-profile-url> [short]`
 
-Natural-language user requests that match `prepare next job` or `prepare job <Job Number>` must invoke the matching local script. Process exactly one job per execution command.
+Natural-language user requests that match `prepare next job` or `prepare job <Job Number>` must invoke the matching local script once per Codex session unless the standalone local script is already known to be blocked by missing Google dependencies in the current repository state. If the known blocker is present, report it briefly and proceed through the connected Google Drive/Sheets plugin without repeating failing local or dry-run attempts. Process exactly one job per execution command.
 
 Natural-language user requests that match `add job <posting-url>`, `add this job <posting-url>`, or `add <posting-url> to the sheet` must use the connected Google Drive/Sheets plugin to inspect and update the spreadsheet. Process exactly one posting URL per add command.
 
@@ -126,10 +126,6 @@ Authoritative master files:
 - `master/Amir_Mirzai_Golpayegani_master_resume.tex`
 - `master/Amir_Mirzai_Golpayegani_cover_letter_example.tex`
 
-Authoritative GitHub Actions workflow:
-
-- `.github/workflows/compile-latex.yml`
-
 Do not overwrite, reformat, clean up, or modify the master files during ordinary job preparation. Treat them as sources of truth for truthful candidate claims and document structure.
 
 ## Output Structure
@@ -181,7 +177,8 @@ For `add job <posting-url>`:
 Before writing a new row:
 
 - read spreadsheet metadata and confirm the `BotResults` tab and expected headers;
-- read the existing populated job rows;
+- keep spreadsheet reads narrow: read headers, the Job Number column or another bounded populated-range signal to find the last populated job, and only the specific rows/ranges needed for duplicate checks and insertion;
+- read the number of the last populated job and surrounding rows before choosing an insertion row;
 - check for duplicates by normalized LinkedIn URL, normalized direct application URL, Job ID, and strong title/company match;
 - if an existing row appears to represent the same posting, report the existing Job Number, Status, title, company, and matching evidence, then do not add a duplicate unless the user explicitly confirms;
 - retrieve and verify the posting from the best available source, preferring the employer's direct application page when the user gave LinkedIn and the direct page can be found;
@@ -358,29 +355,37 @@ For each selected job:
 3. create or update only the selected job folder;
 4. validate both LaTeX files locally;
 5. inspect the diff;
-6. stage only files belonging to the selected job;
-7. commit clearly;
-8. push to `main`;
-9. record the commit SHA.
+6. confirm `resume.pdf` and `cover_letter.pdf` were generated locally and are present in the selected job folder;
+7. stage only files belonging to the selected job, including both `.tex` files and both locally compiled `.pdf` files;
+8. commit clearly;
+9. push to `main`;
+10. record the commit SHA.
+
+Do not use a remote CI step for compiling application PDFs. The repository intentionally commits locally compiled PDFs. As soon as local compilation and validation pass, the PDFs may be committed and pushed with the LaTeX sources.
 
 Suggested commit message:
 
 `Prepare application for Job <Job Number>: <Position Title> at <Company>`
 
-After pushing `.tex` files, identify the GitHub Actions run for the commit, wait for success, verify PDFs were committed, identify the PDF commit SHA, and verify all four remote files.
+After pushing, verify all four remote files exist at the pushed commit SHA:
 
-Do not assume a successful push means PDFs exist. Do not set Status to `Prepared` while Actions is pending.
+- `applications/Job_<number>/resume.tex`
+- `applications/Job_<number>/resume.pdf`
+- `applications/Job_<number>/cover_letter.tex`
+- `applications/Job_<number>/cover_letter.pdf`
+
+Do not wait for any separate remote compile step and do not expect a second commit for generated PDFs.
 
 ## File Links And Spreadsheet Update
 
-After all four files exist remotely, generate verified links for:
+After all four locally compiled and pushed files exist remotely, generate verified links for:
 
 - Curated Resume PDF Link
 - Curated Resume LaTeX Link
 - Cover Letter PDF Link
 - Cover Letter LaTeX Link
 
-Prefer stable links tied to the final commit SHA. Ensure every link points to the selected Job Number.
+Prefer stable links tied to the pushed application commit SHA. Ensure every link points to the selected Job Number.
 
 Only after all four files exist remotely and links are verified, update the selected row:
 
@@ -404,30 +409,18 @@ Use a local lock so two preparation commands cannot operate on the same reposito
 
 ## Completion Report
 
-After each preparation command, show a concise report with:
+Keep completion reports short by default.
 
-- command received;
-- Job Number;
-- Position Title;
-- Company name;
-- Location;
-- Work Arrangement;
-- Referral / Contact Person;
-- Job Type;
-- Expected Salary;
-- selection reason for `prepare next job`;
-- hard-blocker result;
-- job-description source;
-- files created or reused;
-- local compilation results;
-- resume page count;
-- cover-letter page count;
+For successful preparation, report only:
+
+- Job Number, title, company, and location;
+- expected salary;
+- local compile result and page counts;
 - application commit SHA;
-- PDF workflow status;
-- PDF commit SHA when applicable;
 - four final file links;
-- final spreadsheet Status;
-- Prepared Date;
-- remaining error or manual action.
+- final spreadsheet Status and Prepared Date;
+- any short caveat that affects applying.
+
+For an error, report only the command, the short error, what caused it, and any manual action needed. Do not include long workflow checklists unless the user explicitly asks for details.
 
 Do not report an unprocessed job as failed. Do not claim completion unless the spreadsheet row has been re-read and verified as `Prepared`.
