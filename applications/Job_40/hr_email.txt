@@ -1,0 +1,68 @@
+Dear Amir
+
+Thank you for your interest in our software engineering role, focused on optimising cloud-init and Ubuntu for the major public clouds.
+
+We lead upstream work on cloud-init and other tools, which are the de facto standard for cloud VM initialization and configuration. We are focused on quality, user experience and performance, in software that is used in millions of production deployments every day.
+
+In support of that goal we are looking for exceptional software engineers with a focus on quality, reliability and correctness in system initialization, configuration, and cloud operations. To be successful in your application you will need to stand out as an engineer who cares to get things right, to be efficient, and to build products that are usable in complex environments.
+
+I am the hiring lead for this role. I'm a senior person in the engineering group, not a recruiter. A few of us cover all the roles in engineering and this is one of mine. If you have any questions as we step through this process, please feel free to contact me directly.
+
+We are not in a rush to make an appointment. The Canonical hiring process is rigorous, with early assessments and tests that you can handle at your own pace, and then several interview stages:
+
+Initial screening (done)
+Written interview and standardised aptitude and personality tests (this stage)
+Culture and HR interviews to discuss remote work and employment terms
+Technical assessments and role-specific interviews
+It's up to you how fast you move through the early assessments. If I think you are a fantastic candidate but this is not the best role for you at the company, I will steer you to one of my colleagues who may have a different opportunity for you to pursue.
+
+The current stage is your written interview. Please take some time to answer the questions below. We’re looking to get a sense of who you are, what’s important to you, and how you communicate. If you’ve already completed this when applying for another role, please feel free to copy/paste from your previous submission.
+
+Education
+
+We consider academic results in high school and university for all roles, regardless of seniority or department. To enjoy a long and varied career at Canonical, one would need to tackle problems that cannot be defined today! From engineering to marketing to operations and sales, we intensely value colleagues who are able to puzzle through difficult problems and find the optimal path forward.
+
+How did you rank in your high school, in your final year in maths and hard sciences? Which was your strongest? 
+How did you rank in your high school, in your final year in languages and the arts? Which was your strongest? 
+Please state your high school graduation results or university entrance results, along with the system used, and how to understand those. For example, in the US, you might give your SAT or ACT scores. In Germany, you might give your scores 1-5. 
+What sort of high school student were you? Outside of class, what were your interests and hobbies? What would your high school peers remember you for, if we asked them? 
+Which university and degree did you choose? What other universities did you consider, and why did you select that one? 
+At university, did you do particularly well at any area of your degree? 
+Overall, what was your degree result and how did that reflect on your ability? In high school and university, what did you achieve that was exceptional? 
+What leadership roles did you take on during your education?
+Career development
+
+How would you describe your level of experience as a professional software engineer?
+What are your strengths as a software engineer?
+What is your proudest success as a software engineer?
+Outline the role of an engineering manager in shaping a high functioning team.
+Experience
+
+Describe your level of experience in Python, and how you have attained it.
+When did you start working on Linux? Describe your level of experience as a user & developer on Linux.
+How do you address software performance, systematically, in your products and in your software engineering practices?
+How do you prefer to drive documentation for your products?
+Describe your experience with QEMU/KVM, LXC/LXD and cloud computing
+How would you describe your experience in Linux system fundamentals such as networking, storage, and security?
+How do you think about software quality?
+Describe a case where it was very difficult to test code you were writing, but you found a reliable way to do it.
+What would you like to achieve in career development and skills development?
+Context
+
+How are you involved in open source software?
+Describe any significant contributions to open source (with links where possible)
+What do you think are the key ingredients of a successful open source project?
+Why do you most want to work for Canonical?
+Which other companies are building the sort of products you would like to work on?
+What do you think Canonical needs to improve in its engineering and products?
+What do you think is the biggest opportunity for Canonical in this arena?
+Who do you think are key competitors to Canonical? How do you think Canonical should plan to win that race?
+Please upload your submission as a PDF at the URL given below. Write as much as you need.  To avoid bias I have set the system to keep your identity confidential during the review of your submission, please don’t include your name in the PDF or filename.
+
+For your submission please allow us to understand specific examples that highlight your skills and experience. We will refer back to this submission during the interview process to explore your listed experience further.
+
+When you have the opportunity to interview in person, please do take time to ask questions to each of your interviewers about their views of the role and of Canonical.
+
+Thank you! I look forward to reading your answers and perhaps meeting later in the process.
+
+ - Robby
