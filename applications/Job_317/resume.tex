@@ -1,0 +1,260 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\usepackage{microtype}
+\usepackage[default,lining]{carlito}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{fontawesome5}
+
+\geometry{top=0.55in, bottom=0.55in, left=0.65in, right=0.65in}
+
+\hypersetup{
+    colorlinks=true,
+    urlcolor=blue,
+    linkcolor=blue
+}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+\titleformat{\section}
+  {\large\bfseries}
+  {}
+  {0em}
+  {}
+  [\titlerule]
+
+\titlespacing*{\section}{0pt}{0.7em}{0.35em}
+
+\setlist[itemize]{
+    leftmargin=0.18in,
+    itemsep=0.12em,
+    topsep=0.15em,
+    parsep=0em
+}
+
+\newcommand{\resumeItem}[1]{\item #1}
+
+\newcommand{\resumeSubheading}[4]{
+    \textbf{#1} \hfill #2 \\
+    \textit{#3} \hfill \textit{#4}
+}
+
+\newcommand{\resumeEducationSubheading}[5]{
+    \textbf{#1} \hfill #2 \hfill #3 \\
+    \textit{#4} \hfill \textit{#5}
+}
+
+\newcommand{\resumeProjectHeading}[3]{
+    \textbf{#1} \hfill #2 \\
+    \textit{#3}
+}
+
+\begin{document}
+
+%====================
+% Header
+%====================
+
+\begin{center}
+    {\LARGE \textbf{Amir Mirzai Golpayegani}} \\[0.25em]
+    \faMapMarker*~Calgary, AB, Canada \\[0.25em]
+    \faEnvelope~\href{mailto:amirgolpaa24@gmail.com}{amirgolpaa24@gmail.com}
+    $|$
+    \faEnvelope~\href{mailto:amir.mirzaigolpayega@ucalgary.ca}{amir.mirzaigolpayega@ucalgary.ca}
+    $|$
+    \faPhone*~+1 (587) 439-0436 \\[0.25em]
+    \faLinkedin~\href{https://linkedin.com/in/amir-golpayegani-218148165}{linkedin.com/in/amir-golpayegani-218148165}
+    $|$
+    \faGithub~\href{https://github.com/amirgolpaa24}{github.com/amirgolpaa24}
+    $|$
+    \faGlobe~\href{https://amir-portfolio-navy.vercel.app/}{Portfolio}
+\end{center}
+
+%====================
+% Summary
+%====================
+
+\section*{Summary}
+
+M.Sc. Computer Science graduate with experience building Python/C++ systems for machine learning, scalable data pipelines, performance-sensitive processing, and backend APIs. Strong foundation in algorithms, PyTorch model workflows, data structures, statistical evaluation, and distributed-style data systems, with hands-on research software experience across large geospatial datasets and AI workflow automation.
+
+%====================
+% Education
+%====================
+
+\section*{Education}
+
+\resumeEducationSubheading
+{M.Sc. in Computer Science}
+{GPA: \textbf{3.94}/4.0}
+{Sep 2022 -- Feb 2026}
+{University of Calgary}
+{Calgary, Canada}
+
+\vspace{0.35em}
+
+\resumeEducationSubheading
+{B.Sc. in Computer Engineering}
+{GPA: \textbf{3.69}/4.0}
+{Sep 2016 -- Feb 2021}
+{Sharif University of Technology}
+{Tehran, Iran}
+
+%====================
+% Technical Skills
+%====================
+
+\section*{Technical Skills}
+
+\textbf{Programming:} Python, C++, JavaScript, SQL \\
+\textbf{ML / AI:} PyTorch, Scikit-learn, TensorFlow, CNNs, LLM workflows, AI agents, model training and evaluation \\
+\textbf{Systems / Data:} NumPy, Pandas, SciPy, data pipelines, time-series methods, DGGS, GDAL, Rasterio, SNAP \\
+\textbf{Backend / Infrastructure:} Django, Node.js, REST APIs, PostgreSQL, Docker, Git, Linux, AWS, GitHub Actions \\
+\textbf{Performance / Tools:} C++ multithreading, benchmarking, Streamlit, Polyscope, OpenGL, GLSL, n8n, OpenClaw
+
+%====================
+% Work Experience
+%====================
+
+\section*{Work Experience}
+
+\resumeSubheading
+{Research Software Developer}
+{Sep 2022 -- Feb 2026}
+{\href{https://biggeo.com}{BigGeo} / \href{https://www.mitacs.ca/}{Mitacs}, University of Calgary}
+{Calgary, Canada}
+\begin{itemize}[leftmargin=0.25in]
+    \item Built C++/Python software for scalable processing, storage, retrieval, and evaluation of large scientific datasets.
+    \item Automated SAR and optical imagery preprocessing using GDAL, Rasterio, SNAP, and satellite data APIs.
+    \item Developed DGGS-based encoding pipelines to convert satellite imagery into structured tensor files for downstream workflows.
+    \item Improved encoding performance with C++ multithreading, reducing 10-tensor processing from 233s to 26s.
+    \item Reduced storage by 38\% for scaled Canada-wide data with 1,112 GeoTIFF tiles and 16K+ DGGS tensors.
+\end{itemize}
+
+\resumeSubheading
+{Back-End Developer}
+{Jun 2020 -- Jul 2022}
+{\href{https://asr-gooyesh.com/en/}{Asr Gooyesh Pardaz}}
+{Tehran, Iran}
+\begin{itemize}[leftmargin=0.25in]
+    \item Developed Django REST APIs for NLP, text-to-speech, and speech-to-text service plans backed by PostgreSQL.
+    \item Built authentication features including registration, Google login, password reset, and email/phone verification.
+    \item Implemented backend logic for payment-service integration and storing plan/payment records in a relational database.
+    \item Contributed to a WebRTC-based chatbot system using GPT-style responses and FAQ data to answer client questions.
+\end{itemize}
+
+\resumeSubheading
+{Deep Learning Teaching Assistant}
+{Jul 2026}
+{\href{https://neuromatch.io/}{Neuromatch Academy}}
+{Remote, United States}
+\begin{itemize}[leftmargin=0.25in]
+    \item Mentored an international pod of $\sim$15 students through Neuromatch Academy's intensive three-week Deep Learning course.
+    \item Facilitated hands-on PyTorch tutorials spanning MLPs, CNNs, attention/transformers, diffusion generative models, and reinforcement learning.
+    \item Guided project groups through end-to-end deep learning projects, from question formulation to model implementation, evaluation, and final presentations.
+\end{itemize}
+
+\resumeSubheading
+{Teaching Assistant}
+{Dec 2022 -- Apr 2025}
+{\href{https://science.ucalgary.ca/computer-science} {Department of Computer Science}, University of Calgary}
+{Calgary, Canada}
+\begin{itemize}[leftmargin=0.25in]
+    \item \textbf{Developing Big Data Applications}: Mentored +25 students on AWS-based data pipelines, cloud storage, debugging, and scalable data workflows. 
+    \item \textbf{Working with Data at Scale}: Supported +20 students with large-scale data processing, data pipelines, and high-volume data analysis. 
+    \item \textbf{Database Management Systems}: Assisted +75 students with SQL, database design, course projects, grading, and exam support.
+\end{itemize}
+
+%====================
+% Research and Technical Projects
+%====================
+
+\section*{Research and Technical Projects}
+
+\noindent
+\textbf{Spatiotemporal Earth Observation Data System Using DGGS} \hfill Sep 2022 -- Feb 2026 \\
+\textit{\href{https://doi.org/10.3390/rs17040570}{First-author publication}} | \textit{\href{https://ucalgary.scholaris.ca/items/114b394b-e516-4732-bd3a-45dd6160d480}{M.Sc. thesis}} | \textit{C++, Python, DGGS, Wavelets, B-splines, Time-Series}
+\begin{itemize}[leftmargin=0.25in]
+    \item Designed a DGGS-based framework for real-time multiresolution management of large spatiotemporal datasets.
+    \item Developed a tensor-based storage model for direct access to arbitrary regions at multiple resolutions.
+    \item Implemented a triangular wavelet scheme to support multiresolution retrieval without image-pyramid redundancy.
+    \item Built B-spline temporal approximation to compress time-series data and retrieve missing timestamps locally.
+    \item Retrieved 105,489 DGGS cells per time-series query in 13.9s, compared with about 220s using global retrieval.
+\end{itemize}
+
+\noindent \\
+\textbf{DEM Super-Resolution Framework} \hfill May 2024 -- Feb 2026 \\
+\textit{Python, PyTorch, CNNs, Scientific Imaging, Google Earth Engine API, Polyscope, Data Processing and Visualization}
+\begin{itemize}[leftmargin=0.25in]
+    \item Trained deep ResNet models for 4$\times$ DEM super-resolution, reconstructing 30m elevation data from 120m inputs.
+    \item Built a Streamlit pipeline using Rasterio to parallelize GEE DEM tile downloads and collect/preprocess terrain data.
+    \item Implemented PyTorch training and evaluation workflows with terrain-aware metrics such as RMSE, slope, TRI, TPI, and wavelet-based errors.
+    \item Developed a Polyscope-based 3D visualization tool to inspect model outputs and compare reconstruction quality in 3D.
+\end{itemize}
+
+\noindent
+\textbf{Agentic Job Search Automation Platform} \hfill May 2026 -- Present \\
+\textit{OpenClaw, n8n, LLMs, AI Agents, Docker, Workflow Automation, SearXNG, Telegram API}
+\begin{itemize}[leftmargin=0.25in]
+    \item Building an agentic AI system to search jobs, analyze job fit, and generate tailored application materials.
+    \item Designed LLM-based workflows for resume/job matching, skill-gap analysis, and application decision support.
+    \item Integrated Google Sheets, Google Drive, and Telegram API to track jobs and send automated application alerts.
+    \item Prototyped the initial workflow in n8n before migrating toward a more flexible OpenClaw-based agent system.
+\end{itemize}
+
+\noindent
+\textbf{Persian Text Normalizer for NLP} \hfill Oct 2016 -- Feb 2021 \\
+\textit{Python, NLP, Text Processing}
+\begin{itemize}[leftmargin=0.25in]
+    \item Developed a Python-based text normalization toolkit to standardize Persian text for downstream NLP pipelines.
+    \item Implemented preprocessing rules for cleaning, formatting, and preparing Persian text data for language-processing tasks.
+\end{itemize}
+
+\section*{Publication}
+
+\textbf{Amir Mirzai Golpayegani}, Mahmudul Hasan, Faramarz F. Samavati. 
+\textit{Real-Time Multiresolution Management of Spatiotemporal Earth Observation Data Using DGGS}. 
+Remote Sensing, 2025. \href{https://doi.org/10.3390/rs17040570}{doi:10.3390/rs17040570}
+
+%====================
+% Certificates
+%====================
+
+\section*{Certificates}
+
+\textbf{Supervised Machine Learning: Regression and Classification},\\
+DeepLearning.AI and Stanford University, Coursera 
+\hfill Oct 2024 \\
+\textbf{Applied Machine Learning in Python},\\
+University of Michigan, Coursera 
+\hfill Jul 2020
+
+%====================
+% Languages and Achievements
+%====================
+
+\section*{Languages}
+
+\textbf{English:} Full Professional Proficiency (TOEFL \textbf{115}/120) \\
+\textbf{Persian:} Native Proficiency
+
+\section*{Achievement}
+
+\textbf{Teaching Assistant Excellence Laureate} \hfill 2024/2025 \\
+Department of Computer Science, University of Calgary --- awarded for outstanding teaching support \textit{(\href{https://science.ucalgary.ca/computer-science/about/our-department/ta-recognition-2024-2025}{link})}
+
+\vspace{0.35em}
+
+\textbf{Ranked 17th Nationwide in Iran University Entrance Exam (\href{https://en.wikipedia.org/wiki/Iranian_University_Entrance_Exam}{Konkour})} \hfill May 2016 \\
+Top 0.001\% among all participants
+
+\end{document}
