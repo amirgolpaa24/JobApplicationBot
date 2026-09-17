@@ -14,6 +14,7 @@ Use the local command infrastructure for all preparation work. Do not improvise 
 - `./prepare add job <posting-url>`
 - `./prepare --dry-run add job <posting-url>`
 - `message <Job Number> <linkedin-profile-url> [short]`
+- `discover jobs`
 
 Natural-language user requests that match `prepare next job` or `prepare job <Job Number>` must invoke the matching local script once per Codex session unless the standalone local script is already known to be blocked by missing Google dependencies in the current repository state. If the known blocker is present, report it briefly and proceed through the connected Google Drive/Sheets plugin without repeating failing local or dry-run attempts. Process exactly one job per execution command.
 
@@ -24,6 +25,10 @@ Do not prepare a real job during repository setup, review, refactoring, or testi
 Do not prepare application materials as part of `add job`. The add command only discovers, verifies, de-duplicates, scores, and records a posting as `Discovered`.
 
 Natural-language user requests that match `message <Job Number> <linkedin-profile-url>` or `message <Job Number> <linkedin-profile-url> short` must draft exactly one LinkedIn outreach message for that job and profile. This command does not prepare documents, commit files, push code, or update the spreadsheet.
+
+Natural-language user requests that match `discover jobs`, `run job discovery`, `search for jobs`, or `start job discovery` must start one manual discovery pass using the complete instructions in `prompts/daily_job_discovery.md`. Read that file fresh at the beginning of every manual run and treat it as the single authoritative discovery prompt so scheduled and manual searches cannot drift apart. Use live web research and the connected Google Drive/Sheets plugin, and follow the prompt's active-posting verification, fit scoring, priority, duplicate detection, live Job Number allocation, row insertion, write verification, and final-report rules exactly.
+
+The `discover jobs` command may add multiple verified jobs in one run. It must not invoke `./prepare`, create application materials, fill preparation-only spreadsheet columns, or commit and push repository changes. If a required web source or spreadsheet write is unavailable, follow the failure-reporting rules in the canonical discovery prompt and do not claim that rows were added.
 
 ## Spreadsheet
 
