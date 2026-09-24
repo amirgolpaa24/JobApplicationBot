@@ -321,6 +321,23 @@ If page length is a concern, compile and inspect the actual page count before re
 
 Do not invent experience, rewrite so extensively that the resume no longer reflects the master, add unsupported technologies, change dates, change employers, inflate titles, change degree information, add fake metrics, or add claims derived only from the job description.
 
+## ATS And Resume Parsing Rules
+
+Every tailored resume must be optimized for both human readers and applicant tracking systems (ATS).
+
+Use a clean, conventional, single-column resume structure. Keep standard section headings and do not replace meaningful text with icons, graphics, tables, text boxes, images, sidebars, multi-column layouts, or decorative elements that could disrupt PDF text extraction. Small icons in the header are acceptable only when the actual email, phone, location, LinkedIn, GitHub, and portfolio text remains visible and parseable.
+
+When compiling with pdfLaTeX, include Unicode text mapping in tailored resumes unless it is already present or technically incompatible:
+
+- `\input{glyphtounicode}`
+- `\pdfgentounicode=1`
+
+Use job-relevant keywords from the verified posting naturally in the `Summary`, `Technical Skills`, `Work Experience`, and `Research and Technical Projects` sections, but only when they are truthful and supported by Amir's background. Match common wording from the job description for core skills where accurate, such as `Python`, `SQL`, `PyTorch`, `machine learning`, `data pipelines`, `data modeling`, `model evaluation`, `cloud`, `APIs`, or role-specific terms. Do not keyword-stuff, hide text, add unsupported tools, or imply professional experience with a tool Amir has only studied or has not used.
+
+Prefer plain text bullets with strong verbs, clear nouns, measurable outcomes when available, and explicit technologies. Avoid overly clever phrasing that hides searchable skills. Keep dates, job titles, employer names, degrees, certificate names, and contact details written as normal text.
+
+Do not sacrifice truthfulness, protected sections, readability, or page-count discipline for ATS scoring. ATS optimization is a constraint inside the existing truthfulness and tailoring rules, not permission to exaggerate.
+
 ## Cover Letter Rules
 
 Start from `master/Amir_Mirzai_Golpayegani_cover_letter_example.tex`.
@@ -347,7 +364,10 @@ Before committing:
 10. confirm no content from another application remains;
 11. confirm no em dash exists in the cover letter;
 12. confirm the tailored resume retains `Education`, `Certificates`, `Languages`, and `Achievement`;
-13. confirm only truthful, supported claims are present.
+13. confirm only truthful, supported claims are present;
+14. confirm the tailored resume includes Unicode text mapping for pdfLaTeX output, unless technically incompatible;
+15. confirm the resume remains ATS-readable: standard headings, parseable contact text, no table/sidebar/image-only content, and no hidden or unsupported keywords;
+16. when a PDF text-extraction tool is available, extract the resume text and confirm contact details, section headings, job titles, dates, and key skills appear in a sensible order.
 
 Do not push LaTeX that fails local compilation when local LaTeX is available. Do not commit temporary compilation artifacts.
 
